@@ -14,7 +14,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/my_fav_city"
@@ -24,15 +25,17 @@
         app:layout_constraintBottom_toTopOf="@+id/phone_model"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/surprise_button"
         android:layout_width="196dp"
         android:layout_height="70dp"
-        android:text="Button"
+        android:text="Surprise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_model" />
+        app:layout_constraintTop_toBottomOf="@+id/phone_model"
+        android:textAllCaps="false"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
