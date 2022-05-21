@@ -1,10 +1,17 @@
 package com.example.m1;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -17,8 +24,11 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class SurpriseActivity extends AppCompatActivity {
+public class SurpriseActivity extends AppCompatActivity implements LocationListener {
 
     private FusedLocationProviderClient fusedLocationClient;
     TextView dispWeatherTxt;
@@ -31,50 +41,68 @@ public class SurpriseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_surprise);
         dispWeatherTxt =  findViewById(R.id.weather_id);
-        dispWeatherTxt.setText("asdasd");
         getTemp();
     }
 
     @SuppressLint("MissingPermission")
     private void getTemp() {
-        /*RequestQueue queue = Volley.newRequestQueue(this);
-        final String[] weather_url1 = {""};
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location ->
-        {
-            if(location != null) {
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-                dispWeatherTxt.setText(String.format(Locale.US, "%s -- %s", lat, lon));
-                weather_url1[0] = "https://api.weatherbit.io/v2.0/current?" + lat + "&lon=" + lon + "&key=" + api_id;
-            }
-        }); */
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (locationGPS != null) {
+            lat = locationGPS.getLatitude();
+            lon = locationGPS.getLongitude();
+        }
+
         RequestQueue queue = Volley.newRequestQueue(SurpriseActivity.this);
         String awu = "https://api.darksky.net/forecast/96e0788aafdf65a6ffe04079e42a1702"; // "https://api.weatherbit.io/v2.0/current?" + "11" + "&lon=" + "12" + "&key" + api_id;
         String url = String.format(
                 "%s/%s,%s?units=%s",
                 "https://api.darksky.net/forecast/96e0788aafdf65a6ffe04079e42a1702",
-                Float.toString(11.0F),
-                Float.toString(14.0F),
+                Float.toString((float) lat),
+                Float.toString((float) lon),
                 "us"
         );
         StringRequest req = new StringRequest(url, new Response.Listener<String>() {
             public void onResponse(String response) {
                 try {
                     JSONObject json = (JSONObject) new JSONObject(response);
+                    String temp = json.getJSONObject("currently").getString("temperature");
+                    String visibility = json.getJSONObject("currently").getString("summary");
+                    float tempC = ((float) Float.valueOf(temp) - 32.0F) * (5.0F/9.0F);
+                    dispWeatherTxt.setText("Current weather at your location (" + getCity() + ")" + "\n" + "Weather outlook: " + visibility + "\n" +
+                            "Temperature: " + Float.toString(tempC)+ " C\n" + "Disclaimer: this data was gathered using the " +
+                            "DarkSky.net forecast weather API");
+
                 } catch (JSONException e) {
                     Log.d("Surprise Activity", "JSON failed");
                 }
-                dispWeatherTxt.setText(response);
-
-               // dispWeatherTxt.setText("The weather is currently " + (String) json.get(""));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dispWeatherTxt.setText("asdasd3");
                 Log.d("SurpriseActivity",error.toString());
             }
         } );
         queue.add(req);
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+    }
+
+    private String getCity() {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = new ArrayList<>();
+        try {
+            addresses = geocoder.getFromLocation(lat, lon, 1);
+        }
+        catch (Exception e) {
+            Log.d("SurpriseActivity", "getCity() had an exception!");
+        }
+        return addresses.get(0).getLocality();
     }
 }
