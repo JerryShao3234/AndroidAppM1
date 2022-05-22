@@ -8,33 +8,40 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="192dp"
-        android:layout_height="61dp"
-        android:text="Hello"
+        android:layout_width="318dp"
+        android:layout_height="128dp"
+        android:text="TextView"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.387"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.797" />
+        app:layout_constraintVertical_bias="0.582" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="192dp"
-        android:layout_height="61dp"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
         android:text="TextView"
+        android:textSize="32dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.264" />
+        app:layout_constraintVertical_bias="0.173" />
 
     <TextView
         android:id="@+id/manufacturer_id"
-        android:layout_width="192dp"
-        android:layout_height="68dp"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
         android:text="TextView"
+        android:textSize="32dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.562" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.m1;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 public class ModelCityActivity2 extends MapsActivity {
@@ -12,15 +13,15 @@ public class ModelCityActivity2 extends MapsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_model_city2);
         textView = findViewById(R.id.textView ) ;
-        textView .setText("Phone Model:\n" + Build.MODEL) ;
+        textView.setText(Html.fromHtml("<b>" + "Phone Model:\n" + "</b>" + Build.MODEL)) ;
         textViewManu = findViewById(R.id.manufacturer_id);
-        textViewManu.setText("Manufacturer:\n" + Build.MANUFACTURER) ;
+        textViewManu.setText(Html.fromHtml("<b>" + "Manufacturer:\n" + "</b>" + Build.MANUFACTURER)) ;
         this.displayLocation(getCity());
     }
 
     public void displayLocation(String location) {
         textView = findViewById(R.id.textView2 ) ;
-        textView.setText("Current City:\n" + location) ;
+        textView.setText(Html.fromHtml("<b>" + "Current City:\n" + "</b>" + location)) ;
     }
 
 }

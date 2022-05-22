@@ -57,7 +57,6 @@ public class SurpriseActivity extends AppCompatActivity implements LocationListe
         }
 
         RequestQueue queue = Volley.newRequestQueue(SurpriseActivity.this);
-        String awu = "https://api.darksky.net/forecast/96e0788aafdf65a6ffe04079e42a1702"; // "https://api.weatherbit.io/v2.0/current?" + "11" + "&lon=" + "12" + "&key" + api_id;
         String url = String.format(
                 "%s/%s,%s?units=%s",
                 "https://api.darksky.net/forecast/96e0788aafdf65a6ffe04079e42a1702",
@@ -72,9 +71,9 @@ public class SurpriseActivity extends AppCompatActivity implements LocationListe
                     String temp = json.getJSONObject("currently").getString("temperature");
                     String visibility = json.getJSONObject("currently").getString("summary");
                     float tempC = ((float) Float.valueOf(temp) - 32.0F) * (5.0F/9.0F);
-                    dispWeatherTxt.setText("Current weather at your location (" + getCity() + ")" + "\n" + "Weather outlook: " + visibility + "\n" +
-                            "Temperature: " + Float.toString(tempC)+ " C\n" + "Disclaimer: this data was gathered using the " +
-                            "DarkSky.net forecast weather API");
+                    dispWeatherTxt.setText("Current weather at your location (" + getCity() + ")" + "\n\n" + "Weather outlook: " + visibility + "\n" +
+                            "Temperature: " + Float.toString(tempC)+ " C\n\n" + "Disclaimer: this data was gathered using the " +
+                            "DarkSky.net forecast weather API, which is an external service");
 
                 } catch (JSONException e) {
                     Log.d("Surprise Activity", "JSON failed");
