@@ -26,10 +26,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkLocationPermissions();
-        setContentView(R.layout.activity_main);
 
-        mapsButton = findViewById(R.id.phone_model);
+        setContentView(R.layout.activity_main);
+        checkLocationPermissions();
+
+        favCityButton = (Button) findViewById(R.id.my_fav_city);
+        favCityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Selecting favourite city");
+                Intent favCityIntent = new Intent(MainActivity.this, Maps1.class);
+                startActivity(favCityIntent);
+            }
+        });
+
+        mapsButton = (Button) findViewById(R.id.phone_model);
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,17 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        favCityButton = findViewById(R.id.my_fav_city);
-        favCityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Selecting favourite city");
-                Intent favCityIntent = new Intent(MainActivity.this, Maps1.class);
-                startActivity(favCityIntent);
-            }
-        });
-
-        surpriseButton = findViewById(R.id.surprise_button);
+        surpriseButton = (Button) findViewById(R.id.surprise_button);
         surpriseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(serverIntent);
             }
         });
-
     }
-
-
 
     private void checkLocationPermissions() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
