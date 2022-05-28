@@ -9,11 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,8 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,37 +29,52 @@ import java.util.Locale;
 public class Server extends AppCompatActivity {
 
     TextView serverText;
+    TextView clientIPTV;
+    TextView servertimeTV;
+    TextView clienttimeTV;
+    TextView backendNameTV;
+    TextView googleNameTV;
+
     private GoogleSignInClient mGoogleSignIn;
     private int RC_SIGN_IN = 1;
     private String clientIP = ""; //get via Android API...done
-    private String serverIP = ""; //get via REST api..done
-    private String servertime = ""; //get via REST api...done
+    private String serverIP = null; //get via REST api..done
+    private String servertime = null; //get via REST api...done
     private String clienttime = ""; //get via Android API...done
-    private String backendName = ""; //get via REST api...store this in database
-    private String googleName = ""; //get with Google...done
+    private String backendName = null; //get via REST api...store this in database
+    private String googleName = null; //get with Google...done
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
 
-        serverText = findViewById(R.id.server_info);
+        serverText = findViewById(R.id.sip);
+        clientIPTV = findViewById(R.id.cip);
+        servertimeTV = findViewById(R.id.slt);
+        clienttimeTV = findViewById(R.id.clt);
+        backendNameTV = findViewById(R.id.myname);
+        googleNameTV = findViewById(R.id.loggedin);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        clienttime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        clienttime = new SimpleDateFormat("kk:mm:ss", Locale.getDefault()).format(new Date());
 
         mGoogleSignIn = GoogleSignIn.getClient(this, gso);
 
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
+        clientIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
 
         signIn(); //remember, no button necessary!
-//        while(googleName.equals("")) {}
-        serverText.setText(googleName);
-        Log.d("Server","asdasdasdasdasdsadasdasdsadasdagoog");
+        getServerIP();
+        getServerUsername();
+        getServerTime();
+
+        clientIPTV.setText("Client IP address:\n" + clientIP);
+        clienttimeTV.setText("Client local time:\n" + clienttime);
+
     }
 
     private void signIn() {
@@ -75,6 +86,7 @@ public class Server extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        googleName = account.getDisplayName();
         updateUI(account);
     }
 
@@ -85,8 +97,7 @@ public class Server extends AppCompatActivity {
         else {
             Log.d("Server","Signed In, now you can get info");
             googleName = account.getDisplayName();
-            //serverText.setText(googleName);
-            //print googleName somewhere
+            googleNameTV.setText("Logged in: " + googleName);
         }
     }
 
@@ -117,60 +128,13 @@ public class Server extends AppCompatActivity {
         }
     }
 
-    private void testGet() {
-        RequestQueue queue = Volley.newRequestQueue(Server.this);
-        String url = "http://20.24.196.152:8081/";
-        StringRequest req = new StringRequest(url, new Response.Listener<String>() {
-            public void onResponse(String response) {
-                serverText.setText(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                serverText.setText("Failed to retrieve info :(");
-                Log.d("Server error",error.toString());
-            }
-        } );
-        queue.add(req);
-    }
-
-    private void testPut() {
-        RequestQueue queue = Volley.newRequestQueue(Server.this);
-        String url = "http://20.24.196.152:8081/todolist";
-        JSONObject item = new JSONObject();
-        try {
-            item.put("task", "Finish this tutorial");
-            item.put("status", "bruh1");
-        }
-        catch (Exception e) {
-            Log.d("Server error", "JSON object failure");
-        }
-
-        //Slight issue: can't see String response since this only listens for JSON
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, item, new Response.Listener<JSONObject>() {
-            public void onResponse(JSONObject response) {
-                serverText.setText("Put: "+response.toString());
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Server Error", error.toString());
-            }
-        });
-
-
-        queue.add(jsonObjectRequest);
-
-
-    }
-
     private void getServerIP() {
         RequestQueue queue = Volley.newRequestQueue(Server.this);
         String url = "http://20.24.196.152:8081/getServerIP";
         StringRequest req = new StringRequest(url, new Response.Listener<String>() {
             public void onResponse(String response) {
-                serverText.setText(response);
+                serverText.setText("Server IP address:\n" + response);
+                serverIP = response;
             }
         }, new Response.ErrorListener() {
             @Override
@@ -187,7 +151,26 @@ public class Server extends AppCompatActivity {
         String url = "http://20.24.196.152:8081/getServerTime";
         StringRequest req = new StringRequest(url, new Response.Listener<String>() {
             public void onResponse(String response) {
-                serverText.setText(response);
+                servertime = response;
+                servertimeTV.setText("Server local time:\n" + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                serverText.setText("Failed to retrieve info :(");
+                Log.d("Server error",error.toString());
+            }
+        } );
+        queue.add(req);
+    }
+
+    private void getServerUsername() {
+        RequestQueue queue = Volley.newRequestQueue(Server.this);
+        String url = "http://20.24.196.152:8081/getUsername";
+        StringRequest req = new StringRequest(url, new Response.Listener<String>() {
+            public void onResponse(String response) {
+                backendName = response;
+                backendNameTV.setText("My name: " + response);
             }
         }, new Response.ErrorListener() {
             @Override
