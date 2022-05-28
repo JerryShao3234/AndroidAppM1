@@ -76,6 +76,7 @@ public class SurpriseActivity extends AppCompatActivity implements LocationListe
                             "DarkSky.net forecast weather API, which is an external service");
 
                 } catch (JSONException e) {
+                    dispWeatherTxt.setText("API request failed");
                     Log.d("Surprise Activity", "JSON failed");
                 }
             }
@@ -83,6 +84,7 @@ public class SurpriseActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("SurpriseActivity",error.toString());
+                dispWeatherTxt.setText("API request failed + exception");
             }
         } );
         queue.add(req);

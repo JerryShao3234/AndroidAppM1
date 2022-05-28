@@ -11,31 +11,48 @@
         android:layout_width="196dp"
         android:layout_height="70dp"
         android:text="@string/phone_model"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textAllCaps="false"/>
+        app:layout_constraintVertical_bias="0.39" />
 
     <Button
         android:id="@+id/my_fav_city"
         android:layout_width="196dp"
         android:layout_height="70dp"
         android:text="My favourite city"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/phone_model"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textAllCaps="false"/>
+        app:layout_constraintVertical_bias="0.601" />
 
     <Button
         android:id="@+id/surprise_button"
         android:layout_width="196dp"
         android:layout_height="70dp"
         android:text="Surprise"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone_model"
+        app:layout_constraintVertical_bias="0.228" />
+
+    <Button
+        android:id="@+id/server_button"
+        android:layout_width="196dp"
+        android:layout_height="70dp"
+        android:text="Server Info"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_model"
-        android:textAllCaps="false"/>
+        app:layout_constraintTop_toBottomOf="@+id/surprise_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
