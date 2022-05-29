@@ -7,6 +7,7 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
@@ -67,6 +69,15 @@ public class Server extends AppCompatActivity {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         clientIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
 
+        mGoogleSignIn.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d("Server", "Sign out successful!");
+                    }
+                });
+
+
         signIn(); //remember, no button necessary!
         getServerIP();
         getServerUsername();
@@ -86,7 +97,6 @@ public class Server extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        googleName = account.getDisplayName();
         updateUI(account);
     }
 
